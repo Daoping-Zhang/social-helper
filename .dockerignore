@@ -1,0 +1,10 @@
+node_modules
+data
+.git
+.DS_Store
+*.log
+.env
+web/dist
+server/public
+.npm-cache
+.docker-config

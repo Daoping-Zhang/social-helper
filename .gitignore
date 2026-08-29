@@ -1,0 +1,9 @@
+node_modules/
+dist/
+server/public/
+data/
+.DS_Store
+*.log
+.env
+.npm-cache
+.docker-config

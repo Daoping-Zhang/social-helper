@@ -1,0 +1,21 @@
+services:
+  app:
+    build: .
+    container_name: ai-portrait-platform
+    ports:
+      - "3000:3000"
+    environment:
+      PORT: "3000"
+      DATA_DIR: /app/data
+      JWT_SECRET: "change-this-in-production"
+      # mock = 本地模拟（默认，无需外部依赖）；runninghub = 真实 RunningHub
+      AI_PROVIDER: "${AI_PROVIDER:-mock}"
+      # ---- RunningHub（AI_PROVIDER=runninghub 时必填）----
+      RH_API_KEY: "${RH_API_KEY:-}"
+      RH_BASE_URL: "${RH_BASE_URL:-https://www.runninghub.cn}"
+      RH_WORKFLOW_ID_WASH: "${RH_WORKFLOW_ID_WASH:-}"
+      RH_WORKFLOW_ID_FACESWAP: "${RH_WORKFLOW_ID_FACESWAP:-}"
+      RH_WORKFLOW_ID_ENHANCE: "${RH_WORKFLOW_ID_ENHANCE:-}"
+    volumes:
+      - ./data:/app/data
+    restart: unless-stopped
