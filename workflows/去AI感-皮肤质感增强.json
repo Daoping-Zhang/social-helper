@@ -1,0 +1,172 @@
+{
+  "1": {
+    "inputs": {
+      "image": "INPUT_IMAGE.png"
+    },
+    "class_type": "LoadImage",
+    "_meta": {
+      "title": "输入图（换脸/待优化结果）"
+    }
+  },
+  "2": {
+    "inputs": {
+      "ckpt_name": "你的F1或Flux大模型.safetensors"
+    },
+    "class_type": "CheckpointLoaderSimple",
+    "_meta": {
+      "title": "大模型 Checkpoint（F1 / Flux / Kontext 系）"
+    }
+  },
+  "3": {
+    "inputs": {
+      "lora_name": "你的皮肤质感LoRA.safetensors",
+      "strength_model": 0.85,
+      "strength_clip": 0.85,
+      "model": [
+        "2",
+        0
+      ],
+      "clip": [
+        "2",
+        1
+      ]
+    },
+    "class_type": "LoraLoader",
+    "_meta": {
+      "title": "皮肤质感 LoRA（权重 0.85，网站推荐 0.8-1.0）"
+    }
+  },
+  "4": {
+    "inputs": {
+      "text": "毛孔级真实皮肤质感添加, 提升皮肤细节, 去除AI感, 增加人像皮肤纹理, realistic skin pores, natural skin texture, detailed skin, sharp focus, high detail",
+      "clip": [
+        "3",
+        1
+      ]
+    },
+    "class_type": "CLIPTextEncode",
+    "_meta": {
+      "title": "正向提示词（网站推荐：模型名称）"
+    }
+  },
+  "5": {
+    "inputs": {
+      "text": "nsfw, worst quality, low quality, lowres, watermark, blur, deformed, plastic skin, airbrushed, smooth skin, 3d render, cartoon, oversaturated",
+      "clip": [
+        "3",
+        1
+      ]
+    },
+    "class_type": "CLIPTextEncode",
+    "_meta": {
+      "title": "负向提示词"
+    }
+  },
+  "6": {
+    "inputs": {
+      "upscale_method": "lanczos",
+      "width": 1024,
+      "height": 1500,
+      "crop": "disabled",
+      "image": [
+        "1",
+        0
+      ]
+    },
+    "class_type": "ImageScale",
+    "_meta": {
+      "title": "调整尺寸 1024x1500（网站推荐出图尺寸）"
+    }
+  },
+  "7": {
+    "inputs": {
+      "pixels": [
+        "6",
+        0
+      ],
+      "vae": [
+        "2",
+        2
+      ]
+    },
+    "class_type": "VAEEncode",
+    "_meta": {
+      "title": "VAE Encode"
+    }
+  },
+  "8": {
+    "inputs": {
+      "seed": 0,
+      "steps": 22,
+      "cfg": 3.5,
+      "sampler_name": "euler",
+      "scheduler": "normal",
+      "denoise": 0.4,
+      "model": [
+        "3",
+        0
+      ],
+      "positive": [
+        "4",
+        0
+      ],
+      "negative": [
+        "5",
+        0
+      ],
+      "latent_image": [
+        "7",
+        0
+      ]
+    },
+    "class_type": "KSampler",
+    "_meta": {
+      "title": "采样（euler / 22步 / CFG 3.5，网站默认）"
+    }
+  },
+  "9": {
+    "inputs": {
+      "samples": [
+        "8",
+        0
+      ],
+      "vae": [
+        "2",
+        2
+      ]
+    },
+    "class_type": "VAEDecode",
+    "_meta": {
+      "title": "VAE Decode"
+    }
+  },
+  "10": {
+    "inputs": {
+      "upscale_method": "lanczos",
+      "width": 2048,
+      "height": 3000,
+      "crop": "disabled",
+      "image": [
+        "9",
+        0
+      ]
+    },
+    "class_type": "ImageScale",
+    "_meta": {
+      "title": "放大 2x（2048x3000；追求更高画质可换成 SeedVR2 / Wan2.2 放大节点）"
+    }
+  },
+  "11": {
+    "inputs": {
+      "filename_prefix": "skin_enhance",
+      "images": [
+        "10",
+        0
+      ]
+    },
+    "class_type": "SaveImage",
+    "_meta": {
+      "title": "输出图"
+    }
+  }
+}

@@ -185,6 +185,7 @@ server/            Express + node:sqlite 后端
     params.js      参数层级合并
     paramSchema.js 后台参数定义与校验
 web/               React 前端（用户端 + 管理后台）
+workflows/         可直接导入 RunningHub 的附加工作流（如「去AI感/皮肤质感增强」）
 Dockerfile         多阶段构建
 docker-compose.yml 单容器 + 持久化卷
 ```
